@@ -1,0 +1,52 @@
+name = "ai-translation"
+version = "1.0.0"
+author = "IndraMesh"
+license = "Apache-2.0"
+api_version = "1.0.0"
+# Phase 307 (AITR-01..03): the plugin serves its own AI-translation suggestion
+# API through the Core route-injection contract and owns a PRIVATE suggestion
+# table on its own Alembic chain. No connector; the schema/UI bulk task types
+# arrive with a later plan once their declarations exist.
+capabilities = ["api_routes", "task_type"]
+module = "module"
+# The schema/UI bulk tasks run in the worker, so a new version needs a worker
+# restart before Core admits them; this shows the hint in plugin admin.
+requires_worker_update = true
+# CLEAN-03 / Carry-03: active on first discovery — AI suggestions are a
+# first-party entry beside the manual translation editors, gated further by the
+# two AI permissions, the manual read/update rights and the LLM availability
+# check.
+active_by_default = true
+# Phase 318: the plugin only works with a configured Core LLM client and hides
+# its AI actions without one. The Plugins admin page shows the Core's LLM status
+# next to the plugin and the installer prints the remedy, so an active plugin
+# with no LLM is no longer silently empty.
+requires_llm = true
+
+[frontend]
+# The registration bundle produced by the plugin's own Vite build (later plan);
+# the three existing host families are the ONLY surfaces this plugin contributes
+# to — no new page and no new nav item.
+bundle = "static/ai-translation.js"
+extension_points = ["translationPanelActions", "translationAdminActions", "schemaSettingsSections"]
+
+# Phase 307 (D-13): TWO separate AI rights — data AI (field/schema) and UI AI.
+# Default grants are insert-only (D-14): data AI -> Administrator and Editor,
+# UI AI -> Administrator only; Viewer receives neither. A later administrative
+# revoke is never restored (Carry-02).
+[[permissions]]
+resource = "ai-translation"
+action = "data"
+description = "Generate and review AI translation suggestions for schema data."
+default_roles = ["Administrator", "Editor"]
+
+[[permissions]]
+resource = "ai-translation"
+action = "ui"
+description = "Generate and review AI translation suggestions for UI strings."
+default_roles = ["Administrator"]
+
+[database]
+migrations_dir = "migrations"
+version_table = "alembic_version_ai_translation"
+require_restricted_role = true

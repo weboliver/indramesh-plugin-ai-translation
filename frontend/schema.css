@@ -1,0 +1,388 @@
+/* Phase 307 (AITR-02, S2): the ai-translation schema section's ONE scoped sheet.
+ *
+ * Rooted at `.aitr-schema`; class names are `aitr-`-prefixed. Only host semantic
+ * HSL tokens and the approved fixed error red are used. Injected via
+ * `injectPluginStyles('ai-translation','schema',CSS)` and released on unmount. */
+
+.aitr-schema {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.aitr-schema .aitr-intro {
+  margin: 0;
+  max-width: 65ch;
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--muted-foreground));
+}
+
+.aitr-schema .aitr-open-count {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+  overflow-wrap: anywhere;
+}
+
+.aitr-schema .aitr-helper {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: hsl(var(--muted-foreground));
+  overflow-wrap: anywhere;
+}
+
+.aitr-schema .aitr-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: hsl(var(--card));
+}
+
+.aitr-schema .aitr-empty-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+}
+
+.aitr-schema .aitr-empty-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--muted-foreground));
+}
+
+.aitr-schema .aitr-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.aitr-schema .aitr-kinds {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.aitr-schema .aitr-kinds-legend {
+  margin: 0 0 8px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+}
+
+.aitr-schema .aitr-kinds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px 16px;
+}
+
+.aitr-schema .aitr-missing {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+  overflow-wrap: anywhere;
+}
+
+.aitr-schema .aitr-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: hsl(var(--muted));
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+}
+
+.aitr-schema .aitr-notice svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.aitr-schema .aitr-notice span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.aitr-schema .aitr-error {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid hsl(var(--destructive) / 0.3);
+  border-radius: 8px;
+  background: hsl(var(--destructive) / 0.1);
+}
+
+.aitr-schema .aitr-error-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #b91c1c;
+  outline: none;
+}
+
+.dark .aitr-schema .aitr-error-title {
+  color: #f87171;
+}
+
+.aitr-schema .aitr-error-title svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.aitr-schema .aitr-error-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+  overflow-wrap: anywhere;
+}
+
+.aitr-schema .aitr-styles-refused {
+  padding: 16px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: hsl(var(--muted));
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+}
+
+/* Run status/summary block (shared shape with the admin surface) ------------- */
+
+.aitr-schema .aitr-run {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: hsl(var(--card));
+}
+
+.aitr-schema .aitr-run-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+}
+
+.aitr-schema .aitr-run-title-error {
+  color: #b91c1c;
+}
+
+.dark .aitr-schema .aitr-run-title-error {
+  color: #f87171;
+}
+
+.aitr-schema .aitr-run-icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.aitr-schema .aitr-run-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+  overflow-wrap: anywhere;
+}
+
+.aitr-schema .aitr-run-bar {
+  width: 180px;
+  max-width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  background: hsl(var(--muted));
+  overflow: hidden;
+}
+
+.aitr-schema .aitr-run-bar-fill {
+  display: block;
+  height: 100%;
+  background: hsl(var(--primary));
+}
+
+.aitr-schema .aitr-run-started {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: hsl(var(--muted-foreground));
+}
+
+.aitr-schema .aitr-run-link {
+  align-self: flex-start;
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--primary));
+}
+
+.aitr-schema .aitr-run-link:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .aitr-schema .aitr-run-icon {
+    animation: aitr-schema-spin 1s linear infinite;
+  }
+}
+
+@keyframes aitr-schema-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Below 640px: the action row and status stack in DOM order ---------------- */
+
+@media (max-width: 640px) {
+  .aitr-schema .aitr-actions {
+    align-items: stretch;
+  }
+}
+
+.aitr-schema .aitr-review {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.aitr-schema .aitr-review-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.aitr-schema .aitr-review-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+}
+
+.aitr-schema .aitr-review-outcome {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+}
+
+.aitr-schema .aitr-review-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+}
+
+.aitr-schema .aitr-review-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto minmax(0, 1.5fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.aitr-schema .aitr-review-row + .aitr-review-row {
+  border-top: 1px solid hsl(var(--border));
+}
+
+@media (max-width: 720px) {
+  .aitr-schema .aitr-review-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+.aitr-schema .aitr-review-owner {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.aitr-schema .aitr-review-link {
+  color: hsl(var(--primary));
+  overflow-wrap: anywhere;
+}
+
+.aitr-schema .aitr-review-link:hover {
+  text-decoration: underline;
+}
+
+.aitr-schema .aitr-review-type {
+  font-size: 12px;
+  line-height: 16px;
+  color: hsl(var(--muted-foreground));
+}
+
+.aitr-schema .aitr-review-source {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: hsl(var(--muted-foreground));
+}
+
+.aitr-schema .aitr-review-lang {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: hsl(var(--muted-foreground));
+}
+
+.aitr-schema .aitr-review-input {
+  min-width: 0;
+}
+
+.aitr-schema .aitr-review-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.aitr-schema .aitr-review-actions svg {
+  width: 16px;
+  height: 16px;
+}

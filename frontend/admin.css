@@ -1,0 +1,305 @@
+/* Phase 307 (AITR-03, S3/S4): the ai-translation admin action's ONE scoped sheet.
+ *
+ * Rooted at `.aitr-admin`; class names are `aitr-`-prefixed. Only host semantic
+ * HSL tokens and the approved fixed error red are used. Injected via
+ * `injectPluginStyles('ai-translation','admin',CSS)` and released on unmount.
+ * The plugin does not style Core's catalog table; it only styles its own action
+ * row and review header. */
+
+.aitr-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.aitr-admin .aitr-admin-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.aitr-admin .aitr-eligible,
+.aitr-admin .aitr-helper,
+.aitr-admin .aitr-review-note {
+  margin: 0;
+  max-width: 65ch;
+  font-size: 12px;
+  line-height: 16px;
+  color: hsl(var(--muted-foreground));
+  overflow-wrap: anywhere;
+}
+
+.aitr-admin .aitr-review-notice {
+  margin: 0;
+  padding: 16px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: hsl(var(--muted));
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+  overflow-wrap: anywhere;
+}
+
+.aitr-admin .aitr-review-heading {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+  outline: none;
+  overflow-wrap: anywhere;
+}
+
+.aitr-admin .aitr-review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.aitr-admin .aitr-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: hsl(var(--muted));
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+}
+
+.aitr-admin .aitr-notice svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.aitr-admin .aitr-notice span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.aitr-admin .aitr-error {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid hsl(var(--destructive) / 0.3);
+  border-radius: 8px;
+  background: hsl(var(--destructive) / 0.1);
+}
+
+.aitr-admin .aitr-error-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #b91c1c;
+  outline: none;
+}
+
+.dark .aitr-admin .aitr-error-title {
+  color: #f87171;
+}
+
+.aitr-admin .aitr-error-title svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.aitr-admin .aitr-error-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+  overflow-wrap: anywhere;
+}
+
+.aitr-admin .aitr-result {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: hsl(var(--card));
+  outline: none;
+}
+
+.aitr-admin .aitr-result-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+}
+
+.aitr-admin .aitr-result-title svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.aitr-admin .aitr-result-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+  overflow-wrap: anywhere;
+}
+
+.aitr-admin .aitr-skipped {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.aitr-admin .aitr-skipped-label {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: hsl(var(--muted-foreground));
+}
+
+.aitr-admin .aitr-skipped-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aitr-admin .aitr-skipped-key {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 16px;
+  color: hsl(var(--foreground));
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.aitr-admin .aitr-styles-refused {
+  padding: 16px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: hsl(var(--muted));
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+}
+
+/* Run status/summary block (shared shape with the schema surface) ----------- */
+
+.aitr-admin .aitr-run {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: hsl(var(--card));
+}
+
+.aitr-admin .aitr-run-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+}
+
+.aitr-admin .aitr-run-title-error {
+  color: #b91c1c;
+}
+
+.dark .aitr-admin .aitr-run-title-error {
+  color: #f87171;
+}
+
+.aitr-admin .aitr-run-icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.aitr-admin .aitr-run-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--foreground));
+  overflow-wrap: anywhere;
+}
+
+.aitr-admin .aitr-run-bar {
+  width: 180px;
+  max-width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  background: hsl(var(--muted));
+  overflow: hidden;
+}
+
+.aitr-admin .aitr-run-bar-fill {
+  display: block;
+  height: 100%;
+  background: hsl(var(--primary));
+}
+
+.aitr-admin .aitr-run-started {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: hsl(var(--muted-foreground));
+}
+
+.aitr-admin .aitr-run-link {
+  align-self: flex-start;
+  font-size: 14px;
+  line-height: 20px;
+  color: hsl(var(--primary));
+}
+
+.aitr-admin .aitr-run-link:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .aitr-admin .aitr-run-icon {
+    animation: aitr-admin-spin 1s linear infinite;
+  }
+}
+
+@keyframes aitr-admin-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Below 640px: the action row, review header buttons and status stack --------- */
+
+@media (max-width: 640px) {
+  .aitr-admin .aitr-admin-row,
+  .aitr-admin .aitr-review-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

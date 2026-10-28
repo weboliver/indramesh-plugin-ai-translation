@@ -1,0 +1,127 @@
+/* Phase 307 (AITR-01, S1): the ai-translation panel action's ONE scoped sheet.
+ *
+ * The host Tailwind build does not scan `plugins/`, so every layout rule this
+ * surface needs lives here. Every selector is rooted at `.aitr-panel` and every
+ * class name is `aitr-`-prefixed; only host semantic HSL tokens and the approved
+ * fixed error red are used. Injected via
+ * `injectPluginStyles('ai-translation','panel',CSS)` and released on unmount. */
+
+.aitr-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.aitr-panel .aitr-helper {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: hsl(var(--muted-foreground));
+  overflow-wrap: anywhere;
+}
+
+.aitr-panel .aitr-pending {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: hsl(var(--muted-foreground));
+}
+
+.aitr-panel .aitr-spinner {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.aitr-panel .aitr-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: hsl(var(--muted));
+  font-size: 12px;
+  line-height: 16px;
+  color: hsl(var(--foreground));
+}
+
+.aitr-panel .aitr-notice svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.aitr-panel .aitr-notice span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.aitr-panel .aitr-error {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid hsl(var(--destructive) / 0.3);
+  border-radius: 8px;
+  background: hsl(var(--destructive) / 0.1);
+}
+
+.aitr-panel .aitr-error-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: #b91c1c;
+  outline: none;
+}
+
+.dark .aitr-panel .aitr-error-title {
+  color: #f87171;
+}
+
+.aitr-panel .aitr-error-title svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.aitr-panel .aitr-error-body {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: hsl(var(--foreground));
+  overflow-wrap: anywhere;
+}
+
+.aitr-panel .aitr-styles-refused {
+  padding: 16px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: hsl(var(--muted));
+  font-size: 12px;
+  line-height: 16px;
+  color: hsl(var(--foreground));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .aitr-panel .aitr-spinner {
+    animation: aitr-spin 1s linear infinite;
+  }
+}
+
+@keyframes aitr-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
