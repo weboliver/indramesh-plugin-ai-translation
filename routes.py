@@ -20,6 +20,12 @@ Contract:
 * ``DELETE /data/suggestions/{id}`` -> discard one owned data proposal.
 * ``GET /ui/status`` -> UI availability + open UI proposal count.
 
+The two schema-scoped aggregates (``/data/open-count`` and ``/data/runs``) also
+resolve the caller's RECORD-level ``read`` decision for the given schema through
+the plugin SDK, BEFORE they touch that schema's data (D-07): a record DENY
+answers the fixed 403 ``not_authorized`` and never a zero count or a
+run-specific 404 — neither route may become an existence oracle.
+
 Route inputs are strict and never accept an actor, source text, ownership or
 mode. Failures are answered with the plugin's FIXED ``{code, message}``
 categories — never a raw provider text, prompt or key.
@@ -34,6 +40,7 @@ from indramesh.sdk import (
     CoreDataError,
     TranslationScopeRequest,
     authorize_translation_scope,
+    check_record_permission,
     require_permission,
 )
 
@@ -77,6 +84,14 @@ _RUNS_DEPENDENCIES = [
 _INPUT_REJECTED = {
     "code": "input_rejected",
     "message": "Use a valid translation scope and review payload.",
+}
+
+# A record-level DENY on the schema is answered in the plugin's own fixed
+# category (403 through ``_ERROR_STATUS``) — never a count, a run projection or
+# a run-specific 404, and never the schema id echoed back.
+_NOT_AUTHORIZED = {
+    "code": "not_authorized",
+    "message": "Not authorized for this schema.",
 }
 
 # The schema-less UI scope has no entity id; a fixed nil UUID keeps the same
@@ -210,9 +225,14 @@ def build_router(ctx) -> APIRouter:
         """The schema-wide OPEN data-suggestion count (D-02 short overview).
 
         Requires ``ai-translation:data`` + ``translations:read`` + ``schemas:read``
-        so only an actor authorized for this schema reads the count.
+        so only an actor authorized for this schema reads the count. The caller's
+        RECORD-level ``read`` decision is resolved first (D-07): a DENY answers
+        403 ``not_authorized`` and the count query never runs — a ``0`` would
+        still disclose that the schema exists.
         """
         parsed_schema = _parse_uuid(schema_id)
+        if not await check_record_permission(user, "schema", parsed_schema, "read"):
+            raise HTTPException(status_code=403, detail=_NOT_AUTHORIZED)
         async with ctx.db() as session:
             count = await suggestions.open_count_for_schema(session, schema_id=parsed_schema)
         return OpenCountResult(open_count=count)
@@ -460,7 +480,16 @@ def build_router(ctx) -> APIRouter:
         schema_id: str = Query(min_length=1, max_length=64),
         user=Depends(require_permission("ai-translation", "data")),
     ):
+        """The safe run-status projection for one schema.
+
+        The caller's RECORD-level ``read`` decision is resolved BEFORE the run
+        lookup (D-07): a record DENY answers 403 ``not_authorized`` whether or
+        not a run row exists, so the run-specific 404 below can never tell a
+        denied caller that a run exists.
+        """
         parsed_schema = _parse_uuid(schema_id)
+        if not await check_record_permission(user, "schema", parsed_schema, "read"):
+            raise HTTPException(status_code=403, detail=_NOT_AUTHORIZED)
         async with ctx.db() as session:
             run = await runs.latest_for_schema(session, parsed_schema)
             if run is None:

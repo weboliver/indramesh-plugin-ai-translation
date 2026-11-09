@@ -12,11 +12,12 @@ surface lives in ``routes.py``; planning, generation, private persistence,
 admission and the runners live in their own modules.
 """
 
+import asyncio
 from pathlib import Path
 
 from indramesh.sdk import ApiRoutesPlugin, TaskTypeDeclaration, TaskTypePlugin
 
-from . import admission, planning, routes, tasks
+from . import admission, cleanup, planning, routes, tasks
 
 # The schema bulk carries its scope in the real Core ``schema_id`` column. Its
 # only start parameter is the optional kind selection; absent = all six kinds.
@@ -121,7 +122,52 @@ class AiTranslationPlugin(ApiRoutesPlugin, TaskTypePlugin):
         ]
 
     async def on_load(self, ctx):
+        """Activate the plugin, then reconcile rows for languages that are gone.
+
+        The reconciliation is bounded and swallowed (T-323.1-31): Core's registry
+        puts a plugin on ERROR when ``on_load`` raises or exceeds its 5 s limit,
+        so a slow or failing cleanup must only log a warning — the plugin always
+        stays loadable.
+        """
         ctx.logger.info("ai-translation plugin loaded")
+        try:
+            async with ctx.db() as session:
+                removed = await asyncio.wait_for(
+                    cleanup.purge_unknown_languages(session), timeout=3
+                )
+        except Exception as exc:  # noqa: BLE001 - loading must never be blocked
+            ctx.logger.warning(
+                "ai-translation language reconciliation skipped: %s", exc
+            )
+        else:
+            if removed:
+                ctx.logger.info(
+                    "ai-translation removed %s rows for unknown languages", removed
+                )
+        return None
+
+    async def on_language_deleted(self, ctx, **kwargs):
+        """Remove this plugin's rows for a deleted language (D-19).
+
+        Core fires this AFTER the deleting transaction commits and passes no
+        shared session, so ``ctx.db()`` opens a fresh one and this cleanup commits
+        on its own. A failure is logged and swallowed: a cleanup must never turn
+        a successful language delete into an error.
+        """
+        code = kwargs.get("language_code")
+        try:
+            async with ctx.db() as session:
+                removed = await cleanup.purge_language(session, code)
+        except Exception as exc:  # noqa: BLE001 - the hook must never gate
+            ctx.logger.warning(
+                "ai-translation cleanup for deleted language %r failed: %s",
+                code,
+                exc,
+            )
+            return None
+        ctx.logger.info(
+            "ai-translation removed %s rows for deleted language %r", removed, code
+        )
         return None
 
     async def on_unload(self, ctx):
